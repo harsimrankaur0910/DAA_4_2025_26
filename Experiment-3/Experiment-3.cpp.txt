@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<char> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    unordered_map<int, int> firstIndex;
+    int balance = 0;
+    int ans = 0;
+
+    firstIndex[0] = -1;
+
+    for (int i = 0; i < n; i++) {
+
+        if (arr[i] == 'P') {
+            balance++;
+        } else if (arr[i] == 'A') {
+            balance--;
+        }
+
+        if (firstIndex.count(balance)) {
+            ans = max(ans, i - firstIndex[balance]);
+        } else {
+            firstIndex[balance] = i;
+        }
+    }
+
+    cout << ans;
+    return 0;
+}
