@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MAX 1000
+
+int heap[MAX];
+int heapSize = 0;
+int K = 3;
+
+void heapifyUp(int i) {
+    while (i > 0 && heap[(i - 1) / 2] < heap[i]) {
+        swap(heap[(i - 1) / 2], heap[i]);
+        i = (i - 1) / 2;
+    }
+}
+
+void heapifyDown(int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < heapSize && heap[left] > heap[largest])
+        largest = left;
+    if (right < heapSize && heap[right] > heap[largest])
+        largest = right;
+
+    if (largest != i) {
+        swap(heap[i], heap[largest]);
+        heapifyDown(largest);
+    }
+}
+
+void insertValue(int val) {
+    heap[heapSize] = val;
+    heapSize++;
+    heapifyUp(heapSize - 1);
+}
+
+int removeTop() {
+    int top = heap[0];
+    heap[0] = heap[heapSize - 1];
+    heapSize--;
+    heapifyDown(0);
+    return top;
+}
+
+int main() {
+    int scores[] = {10, 20, 5, 15, 25, 8};
+    int n = 6;
+
+    for (int i = 0; i < n; i++) {
+        insertValue(scores[i]);
+
+        if (heapSize < K) {
+            cout << -1 << endl;
+            continue;
+        }
+
+        int temp[K];
+        for (int j = 0; j < K - 1; j++)
+            temp[j] = removeTop();
+
+        cout << heap[0] << endl;
+
+        for (int j = 0; j < K - 1; j++)
+            insertValue(temp[j]);
+    }
+
+    return 0;
+}
